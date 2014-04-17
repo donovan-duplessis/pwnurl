@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version_info__ = ('0', '1', '0')
-__version__ = '.'.join(__version_info__)
+__version__ = '0.1.0'
 __author__ = 'Donovan du Plessis'
 __email__ = 'donovan@binarytrooper.com'
 __license__ = 'MIT'
