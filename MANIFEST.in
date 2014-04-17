@@ -1,0 +1,13 @@
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include HISTORY.rst
+include LICENSE
+include README.rst
+
+include *.py
+
+include requirements/prod.txt
+include requirements/dev.txt
+
+recursive-include pwnurl/templates *
+recursive-include pwnurl/static *

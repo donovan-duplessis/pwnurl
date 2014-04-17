@@ -1,0 +1,12 @@
+language: python
+
+python:
+  - "2.7"
+
+install: pip install -r requirements/prod.txt -r requirements/dev.txt --use-mirrors
+
+script: nosetests
+
+notifications:
+    email:
+      - donovan@binarytrooper.com
