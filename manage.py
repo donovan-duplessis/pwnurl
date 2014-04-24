@@ -12,11 +12,10 @@ from flask.ext.assets import ManageAssets
 
 from pwnurl import __version__ as ver
 from pwnurl.app import create_app
-from pwnurl.user.models import User
-from pwnurl.assets import assets
-from pwnurl.settings import DevConfig, ProdConfig
-from pwnurl.database import db
-from pwnurl.gunicorn_server import GunicornServer
+from pwnurl.models import User, Role
+from pwnurl.config import configs
+from pwnurl.common.extensions import assets, db
+from pwnurl.common.gunicorn_server import GunicornServer
 
 phelp = """
 Python
@@ -34,13 +33,13 @@ SQLAlchemy
 """
 
 env = os.environ.get('PWNURL_ENV', 'dev')
-cfg = (DevConfig if env == 'dev' else ProdConfig)
-app = create_app(cfg)
+app = create_app(configs[env])
 
 if os.environ.get('PWNURL_SETTINGS', None):
     app.config.from_envvar('PWNURL_SETTINGS')
 
 manager = Manager(app)
+
 
 def config(key):
     """ Return app configuration value based on specified key """
@@ -57,6 +56,15 @@ def test():
     sys.exit(status)
 
 
+@manager.command
+def profile(length=25):
+    """ Start the application under the code profiler """
+
+    from werkzeug.contrib.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length])
+    app.run()
+
+
 def _help():
     """ Display both SQLAlchemy and Python help statements """
 
@@ -64,10 +72,11 @@ def _help():
     print statement.strip()
 
 
-cntx_ = dict(app=app, db=db, User=User, help=_help)
-shell = dict(make_context=lambda: cntx_,
-             banner='Interactive PwnUrl Shell v%s [type help() for help sheet]'
-             % ver)
+cntx_ = dict(app=app, db=db, User=User, Role=Role, help=_help)
+shell = dict(
+    make_context=lambda: cntx_,
+    banner='Interactive PwnUrl Shell v%s [type help() for help sheet]' % ver
+)
 
 bind_options = (config('host'), config('port'))
 

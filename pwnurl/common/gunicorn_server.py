@@ -19,7 +19,7 @@ class GunicornServer(Command):
         )
 
     def handle(self, app, host, port, config, **kwargs):
-        from ConfigParser import ConfigParser, NoOptionError
+        from ConfigParser import ConfigParser
 
         gc = ConfigParser()
         try:

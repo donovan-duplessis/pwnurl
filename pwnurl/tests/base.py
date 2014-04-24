@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+
 from flask.ext.testing import TestCase
-from pwnurl.settings import TestConfig
+
 from pwnurl.app import create_app
-from pwnurl.database import db
+from pwnurl.config import TestConfig
+from pwnurl.common.extensions import db
 
 
 class DbTestCase(TestCase):
-    """Base TestCase for tests that require a database."""
+
+    """ Base TestCase for tests that require a database """
 
     def create_app(self):
         app = create_app(TestConfig)

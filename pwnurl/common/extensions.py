@@ -3,9 +3,6 @@
 in app.py
 """
 
-from flask.ext.bcrypt import Bcrypt
-bcrypt = Bcrypt()
-
 from flask.ext.login import LoginManager
 login_manager = LoginManager()
 
@@ -17,3 +14,9 @@ migrate = Migrate()
 
 from flask.ext.cache import Cache
 cache = Cache()
+
+from flask.ext.assets import Environment
+assets = Environment()
+
+from flask_debugtoolbar import DebugToolbarExtension
+toolbar = DebugToolbarExtension()
