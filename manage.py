@@ -6,6 +6,8 @@ import sys
 import shlex
 import subprocess
 
+import pwnurl.common.helpers as h
+
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.assets import ManageAssets
@@ -14,8 +16,10 @@ from pwnurl import __version__ as ver
 from pwnurl.app import create_app
 from pwnurl.models import User, Role
 from pwnurl.config import configs
+
 from pwnurl.common.extensions import assets, db
 from pwnurl.common.gunicorn_server import GunicornServer
+from pwnurl.common.populate_manager import manager as populate_manager
 
 phelp = """
 Python
@@ -39,7 +43,6 @@ if os.environ.get('PWNURL_SETTINGS', None):
     app.config.from_envvar('PWNURL_SETTINGS')
 
 manager = Manager(app)
-
 
 def config(key):
     """ Return app configuration value based on specified key """
@@ -72,7 +75,7 @@ def _help():
     print statement.strip()
 
 
-cntx_ = dict(app=app, db=db, User=User, Role=Role, help=_help)
+cntx_ = dict(app=app, db=db, User=User, Role=Role, help=_help, h=h)
 shell = dict(
     make_context=lambda: cntx_,
     banner='Interactive PwnUrl Shell v%s [type help() for help sheet]' % ver
@@ -85,6 +88,7 @@ manager.add_command('server', Server(*bind_options))
 manager.add_command('assets', ManageAssets(assets))
 manager.add_command('shell', Shell(**shell))
 manager.add_command('db', MigrateCommand)
+manager.add_command('populate', populate_manager)
 
 if __name__ == '__main__':
     manager.run()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, g
+from werkzeug.contrib.fixers import ProxyFix
 
 import pwnurl.common.helpers as helper
 
@@ -49,6 +50,8 @@ def configure_extensions(app):
 
     db.init_app(app)
 
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
     assets.init_app(app)
     for asset in bundles:
         for (name, bundle) in asset.iteritems():
@@ -76,7 +79,11 @@ def configure_callbacks(app):
         """ Retrieve menu configuration before every request (this will return
             cached version if possible, else reload from database. """
 
-        g.menusystem = helper.generate_menusystem()
+        from flask import session
+
+        #g.menusystem = helper.generate_menusystem()
+        session['menusystem'] = helper.generate_menusystem()
+        print session['menusystem']
 
 
 def configure_error_handlers(app):

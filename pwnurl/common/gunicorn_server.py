@@ -42,11 +42,13 @@ class GunicornServer(Command):
             class FlaskApplication(Application):
 
                 def init(self, parser, opts, args):
+                    print options
                     return options
 
                 def load(self):
                     return app
 
             sys.argv = sys.argv[:2]
+
 
             FlaskApplication().run()
