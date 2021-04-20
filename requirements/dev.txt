@@ -3,7 +3,7 @@
 
 # Testing
 nose
-py==1.4.20
+py==1.10.0
 Flask-Testing
 factory-boy>=2.2.1
 Flask-WebTest>=0.0.6
