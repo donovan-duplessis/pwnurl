@@ -15,5 +15,5 @@ Flask-Script
 Flask-DebugToolbar
 
 flake8
-wheel==0.22.0
+wheel==0.38.1
 coverage
